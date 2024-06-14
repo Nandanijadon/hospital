@@ -74,7 +74,8 @@ function EmployeeList() {
     department_id: '',
     employee_email: ' ',
     employee_contactno: ' ',
-    status:' '
+    status:' ',
+    viewprofile:''
   });
 
   const fetchData = async () => {
@@ -108,7 +109,8 @@ function EmployeeList() {
     department_id: '',
     employee_email: ' ',
     employee_contactno: ' ',
-    status:'Active'
+    status:'Active',
+    viewprofile:''
   });
 
   const postapi = (e) => {
@@ -253,6 +255,7 @@ function EmployeeList() {
               <StyledTableCell>Employee Email</StyledTableCell>
               <StyledTableCell>Employee Contact no</StyledTableCell>
               <StyledTableCell>Status</StyledTableCell>
+              <StyledTableCell>View Profile</StyledTableCell>
               <StyledTableCell>Action</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -274,6 +277,13 @@ function EmployeeList() {
                 <StyledTableCell>{item.employee_email}</StyledTableCell>
                 <StyledTableCell>{item.employee_contactno}</StyledTableCell>
                 <StyledTableCell sx={{ color: item.status === 'Active' ? '#22c55e' : '#ef4444' }}>{item.status}</StyledTableCell>
+
+                <StyledTableCell>
+                 
+                  <DeleteIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }} onClick={() => deleteapi(item.employee_id)} />
+                </StyledTableCell>
+            
+
                 <StyledTableCell>
                   <EditIcon sx={{ color: '#1e293b', fontSize: '20px' }} onClick={() => handleOpenEditDialog(item)} />
                   <DeleteIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }} onClick={() => deleteapi(item.employee_id)} />

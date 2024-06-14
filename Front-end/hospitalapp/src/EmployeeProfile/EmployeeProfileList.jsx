@@ -85,7 +85,7 @@ function EmployeeProfileList() {
     salary: '',
     date_of_joining: '',
     date_of_birth: '',
-    department_id: '',
+    employee_id: '',
     image:''
   });
 
@@ -129,7 +129,7 @@ function EmployeeProfileList() {
     salary: '',
     date_of_joining: '',
     date_of_birth: '',
-    department_id: '',
+    employee_id: '',
     image:''
 
   });
@@ -172,9 +172,9 @@ function EmployeeProfileList() {
   const endIndex = startIndex + itemsPerPage;
 
   const filteredData = data.filter(item =>
-    item.profile_name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.profile_name && item.profile_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
+  
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
   const handleSearchChange = (e) => {
@@ -267,8 +267,9 @@ function EmployeeProfileList() {
         <Table sx={{ minWidth: 300 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Sno</StyledTableCell>
-              <StyledTableCell>Profile Id</StyledTableCell>
+              <StyledTableCell>Sno</StyledTableCell>  
+              <StyledTableCell>Profile Pic</StyledTableCell>
+              <StyledTableCell>Image</StyledTableCell>
               <StyledTableCell>Profile Name</StyledTableCell>
               <StyledTableCell>Age</StyledTableCell>
               <StyledTableCell>Gender</StyledTableCell>
@@ -277,8 +278,7 @@ function EmployeeProfileList() {
               <StyledTableCell>Salary</StyledTableCell>
               <StyledTableCell>Date of joining</StyledTableCell>
               <StyledTableCell>Date Of Birth</StyledTableCell>
-              <StyledTableCell>Department Id</StyledTableCell>
-              <StyledTableCell>Image</StyledTableCell>
+              <StyledTableCell>Employee Id</StyledTableCell>
               <StyledTableCell>Action</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -295,6 +295,7 @@ function EmployeeProfileList() {
               >
                 <StyledTableCell>{startIndex + index + 1}</StyledTableCell>
                 <StyledTableCell>{item.profile_id}</StyledTableCell>
+                <StyledTableCell><img src={item.image} style={{ height: '40px' ,width:'40px', borderRadius:'50px'}}/></StyledTableCell>
                 <StyledTableCell>{item.profile_name}</StyledTableCell>
                 <StyledTableCell>{item.age}</StyledTableCell>
                 <StyledTableCell>{item.gender}</StyledTableCell>
@@ -303,11 +304,11 @@ function EmployeeProfileList() {
                 <StyledTableCell>{item.salary}</StyledTableCell>
                 <StyledTableCell>{item.date_of_joining}</StyledTableCell>
                 <StyledTableCell>{item.date_of_birth}</StyledTableCell>
-                <StyledTableCell>{item.department_id}</StyledTableCell>
-                <StyledTableCell>{item.image}</StyledTableCell>
+                <StyledTableCell>{item.employee_id}</StyledTableCell>
+             
                 <StyledTableCell>
                   <EditIcon sx={{ color: '#1e293b', fontSize: '20px' }} onClick={() => handleOpenEditDialog(item)} />
-                  <DeleteIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }} onClick={() => deleteapi(item.profile_id)} />
+                  <DeleteIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }} onClick={() => deleteapi(item.profile_id)}/>  
                 </StyledTableCell>
               </StyledTableRow>
             ))}

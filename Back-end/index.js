@@ -9,6 +9,7 @@ const port = 6600;
 app.use(express.json());
 app.use(cors())
 
+
 const roomroute = require('./Route/roomRoute/roomRoute');
 const departmentroute = require('./Route/departmentRoute/departmentRoute');
 const employeeroute = require('./Route/employeeRoute/employeeRouter');
@@ -58,6 +59,7 @@ const roomSwaggerOptions = {
 const roomSwaggerDocs = swaggerJsdoc(roomSwaggerOptions);
 app.use('/testing', swaggerUi.serve, swaggerUi.setup(roomSwaggerDocs));
 
+app.use("/public",express.static("Public"));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

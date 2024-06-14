@@ -19,11 +19,11 @@ const getemployee = async(req,res)=>{
 }
 
 const postemployee = async (req,res)=>{
-    const {employee_id, employee_name, department_id, employee_email, employee_contactno, status} = req.body;
+    const {employee_id, employee_name, department_id, employee_email, employee_contactno, status, viewprofile} = req.body;
 
-    let query = 'INSERT INTO employee (employee_id, employee_name, department_id, employee_email, employee_contactno,status) values($1,$2,$3,$4,$5,$6)';
+    let query = 'INSERT INTO employee (employee_id, employee_name, department_id, employee_email, employee_contactno,status, viewprofile) values($1,$2,$3,$4,$5,$6,$7)';
 
-    await connection.query(query, [employee_id, employee_name, department_id, employee_email, employee_contactno, status],(err,result)=>{
+    await connection.query(query, [employee_id, employee_name, department_id, employee_email, employee_contactno, status,viewprofile],(err,result)=>{
 
         if(err){
 
@@ -60,11 +60,11 @@ const deleteemployee = async(req,res)=>{
 
 const putemployee = async(req,res)=>{
     let employee_id = req.params.employee_id;
-    let {employee_name, department_id, employee_email, employee_contactno, status} = req.body;
+    let {employee_name, department_id, employee_email, employee_contactno, status,viewprofile} = req.body;
 
-    let query = 'UPDATE employee SET employee_name = $1, department_id = $2, employee_email = $3, employee_contactno = $4, status = $5 WHERE employee_id = $6' ;
+    let query = 'UPDATE employee SET employee_name = $1, department_id = $2, employee_email = $3, employee_contactno = $4, status = $5, viewprofile =$6 WHERE employee_id = $7' ;
 
-    await connection.query(query,[employee_name, department_id, employee_email, employee_contactno, status, employee_id], (err,result)=>{
+    await connection.query(query,[employee_name, department_id, employee_email, employee_contactno, status, viewprofile, employee_id], (err,result)=>{
 
         if(err){
             console.error('Error executing query:', err.message);

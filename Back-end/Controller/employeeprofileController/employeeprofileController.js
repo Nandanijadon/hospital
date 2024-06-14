@@ -28,8 +28,9 @@ const postemployeeprofile = async (req, res) => {
         if (req.file && req.file.filename) {
             imageData.image = req.file.filename;
         }
-
+ var fullurl= req.protocol+"://" + req.get("host") + "/public/";
         const data = {
+
             profile_id: req.body.profile_id,
             profile_name: req.body.profile_name,
             age: req.body.age,
@@ -39,11 +40,11 @@ const postemployeeprofile = async (req, res) => {
             salary: req.body.salary,
             date_of_joining: req.body.date_of_joining,
             date_of_birth: req.body.date_of_birth,
-            department_id: req.body.department_id,
-            ...imageData
+            employee_id: req.body.employee_id,
+            image: fullurl + req.file.filename
         };
 
-        const query = 'INSERT INTO employee_profile (profile_id, profile_name, age, gender, contact_no, address, salary, date_of_joining, date_of_birth, department_id, image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
+        const query = 'INSERT INTO employee_profile (profile_id, profile_name, age, gender, contact_no, address, salary, date_of_joining, date_of_birth, employee_id, image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
 
         const values = [
             data.profile_id,
@@ -55,7 +56,7 @@ const postemployeeprofile = async (req, res) => {
             data.salary,
             data.date_of_joining,
             data.date_of_birth,
-            data.department_id,
+            data.employee_id,
             data.image
         ];
 
@@ -89,11 +90,11 @@ const deleteemployeeprofile = async (req,res)=>{
 const putemployeeprofile = async (req,res)=>{
     let profile_id = req.params.profile_id;
 
-    let{profile_name,age,gender, contact_no,address,salary, date_of_joining,  date_of_birth, department_id, image} = req.body
+    let{profile_name,age,gender, contact_no,address,salary, date_of_joining,  date_of_birth, employee_id, image} = req.body
 
-    let query = 'UPDATE employee_profile SET profile_name=$1, age=$2 ,gender=$3, contact_no =$4,address=$5,salary=$6, date_of_joining=$7,  date_of_birth=$8, department_id=$9, image =$10 WHERE profile_id = $11';
+    let query = 'UPDATE employee_profile SET profile_name=$1, age=$2 ,gender=$3, contact_no =$4,address=$5,salary=$6, date_of_joining=$7,  date_of_birth=$8, employee_id=$9, image =$10 WHERE profile_id = $11';
 
-    await connection.query(query, [profile_name,age,gender, contact_no,address,salary, date_of_joining,  date_of_birth, department_id,image,profile_id], (err,result)=>{
+    await connection.query(query, [profile_name,age,gender, contact_no,address,salary, date_of_joining,  date_of_birth, employee_id,image,profile_id], (err,result)=>{
 
         if(err){
 
