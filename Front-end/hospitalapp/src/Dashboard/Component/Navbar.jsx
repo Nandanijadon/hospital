@@ -53,7 +53,6 @@ import BusinessIcon from '@mui/icons-material/Business';
 
 
 
-
 const drawerWidth = 240;
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -86,10 +85,11 @@ const closedMixin = (theme) => ({
 });
 
 const DrawerHeader = styled('div')(({ theme }) => ({
+  
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
+  padding: theme.spacing(0, 0.5), // Adjusted padding here
   ...theme.mixins.toolbar,
 }));
 
@@ -334,152 +334,153 @@ function Sidebar() {
 
         {/* ////////////////////////////////////////////////////////// */}
 
-        <List sx={{backgroundColor:'#1e293b', color: 'white'}}>
+        <List sx={{backgroundColor:'#1e293b', color: 'white',padding:0.3}}>
         {['Dashboard'].map((text, index) => (
           <ListItem key={text} disablePadding onClick={handleDashboard}>
             <ListItemButton>
               <ListItemIcon>
                 
-                {index === 0 && <DashboardIcon sx={{color:'white'}} onClick={handleDashboard}/>}
+                {index === 0 && <DashboardIcon sx={{color:'white', fontSize:'22px'}} onClick={handleDashboard}/>}
                
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
 
        
-        <List sx={{ backgroundColor:'#1e293b', color:'white'}}>
+        <List sx={{ backgroundColor:'#1e293b', color:'white',padding:0.3}}>
         {['Room'].map((text, index) => (
           <ListItem key={text} disablePadding onClick={handleRoom}>
             <ListItemButton>
               <ListItemIcon>
                 
-                {index === 0 && <MeetingRoomIcon sx={{color:'white'}} onClick={handleRoom}/>}
+                {index === 0 && <MeetingRoomIcon sx={{color:'white',fontSize:'22px'}} onClick={handleRoom}/>}
                
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
               
-      <List sx={{backgroundColor:'#1e293b', color: 'white'}}>
+      <List sx={{backgroundColor:'#1e293b', color: 'white',padding:0.3}}>
         {['Department'].map((text, index) => (
           <ListItem key={text} disablePadding onClick={handleDepartment}>
             <ListItemButton>
               <ListItemIcon>
                 
-                {index === 0 && <BusinessIcon sx={{color:'white'}} onClick={handleDepartment}/>}
+                {index === 0 && <BusinessIcon sx={{color:'white',fontSize:'22px'}} onClick={handleDepartment}/>}
                
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
 
-      <List sx={{ backgroundColor:'#1e293b', color:'white'}}>
+      <List sx={{ backgroundColor:'#1e293b', color:'white',padding:0.3}}>
         {['Role'].map((text, index) => (
           <ListItem key={text} disablePadding onClick={handleRole}>
             <ListItemButton>
               <ListItemIcon>
                 
-                {index === 0 && <GroupWorkIcon sx={{color:'white'}} onClick={handleRole}/>}
+                {index === 0 && <GroupWorkIcon sx={{color:'white',fontSize:'22px'}} onClick={handleRole}/>}
                
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
 
-      <List sx={{ backgroundColor:'#1e293b', color:'white'}}>
+      <List sx={{ backgroundColor:'#1e293b', color:'white',padding:0.3}}>
         {['Employee'].map((text, index) => (
           <ListItem key={text} disablePadding onClick={handleEmployee}>
             <ListItemButton>
               <ListItemIcon>
                    
-                {index === 0 && <BadgeIcon sx={{color:'white'}} onClick={handleEmployee}/>}
+                {index === 0 && <BadgeIcon sx={{color:'white',fontSize:'22px'}} onClick={handleEmployee}/>}
                
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
 
-      <List sx={{ backgroundColor:'#1e293b', color:'white'}}>
+      <List sx={{ backgroundColor:'#1e293b', color:'white',padding:0.3}}>
         {['Lab'].map((text, index) => (
           <ListItem key={text} disablePadding onClick={handleLab}>
             <ListItemButton>
               <ListItemIcon>
                    
-                {index === 0 && <ScienceIcon sx={{color:'white'}} onClick={handleLab}/>}
+                {index === 0 && <ScienceIcon sx={{color:'white',fontSize:'22px'}} onClick={handleLab}/>}
                
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
 
-      <List sx={{ backgroundColor:'#1e293b', color:'white'}}>
+      <List sx={{ backgroundColor:'#1e293b', color:'white',padding:0.3}}>
         {['Patient'].map((text, index) => (
           <ListItem key={text} disablePadding onClick={handlePatient}>
             <ListItemButton>
               <ListItemIcon>
                    
-                {index === 0 && <SickIcon sx={{color:'white'}} onClick={handlePatient}/>}
+                {index === 0 && <SickIcon sx={{color:'white',fontSize:'22px'}} onClick={handlePatient}/>}
                
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
 
-      <List sx={{ backgroundColor:'#1e293b', color:'white'}}>
+      <List sx={{ backgroundColor:'#1e293b', color:'white',padding:0.3}}>
         {['Employee Profile'].map((text, index) => (
           <ListItem key={text} disablePadding onClick={handleEmployeeProfile}>
             <ListItemButton>
               <ListItemIcon>
                    
-                {index === 0 && <FolderSharedIcon sx={{color:'white'}} onClick={handleEmployeeProfile}/>}
+                {index === 0 && <FolderSharedIcon sx={{color:'white',fontSize:'22px'}} onClick={handleEmployeeProfile}/>}
                
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
 
-      <List sx={{ backgroundColor:'#1e293b', color:'white'}}>
+      <List sx={{ backgroundColor:'#1e293b', color:'white',padding:0.3}}>
         {['Treatment'].map((text, index) => (
           <ListItem key={text} disablePadding onClick={handleHospitalTreatment}>
             <ListItemButton>
               <ListItemIcon>
                    
-                {index === 0 && <MedicationLiquidIcon sx={{color:'white'}} onClick={handleHospitalTreatment}/>}
+                {index === 0 && <MedicationLiquidIcon sx={{color:'white',fontSize:'22px'}} onClick={handleHospitalTreatment}/>}
                
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
 
-      <List sx={{ backgroundColor:'#1e293b', color:'white'}}>
+      <List sx={{ backgroundColor:'#1e293b', color:'white',padding:0.3}}>
         {['Assign Role'].map((text, index) => (
           <ListItem key={text} disablePadding onClick={handleAssignrole}>
             <ListItemButton>
               <ListItemIcon>
                    
-                {index === 0 && <HomeWorkIcon sx={{color:'white'}} onClick={handleAssignrole}/>}
+                {index === 0 && <HomeWorkIcon sx={{color:'white',fontSize:'22px'}} onClick={handleAssignrole}/>}
                
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
+
             </ListItemButton>
           </ListItem>
         ))}

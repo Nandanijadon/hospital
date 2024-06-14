@@ -20,6 +20,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
 import SearchIcon from '@mui/icons-material/Search';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const CustomTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -72,7 +73,8 @@ function EmployeeList() {
     employee_name: ' ',
     department_id: '',
     employee_email: ' ',
-    employee_contactno: ' '
+    employee_contactno: ' ',
+    status:' '
   });
 
   const fetchData = async () => {
@@ -105,7 +107,8 @@ function EmployeeList() {
     employee_name: ' ',
     department_id: '',
     employee_email: ' ',
-    employee_contactno: ' '
+    employee_contactno: ' ',
+    status:'Active'
   });
 
   const postapi = (e) => {
@@ -192,30 +195,52 @@ function EmployeeList() {
   return (
     <>
       <CustomTextField
-        variant="outlined"
-        placeholder="Search by Employee Name..."
-        value={searchQuery}
-        onChange={handleSearchChange}
-        sx={{ margin: '3px', backgroundColor: '#f3f3f3' }}
-        InputProps={{
-          endAdornment: <SearchIcon />
-        }}
-      />
+  variant="outlined"
+  placeholder="Search by Employee Name..."
+  value={searchQuery}
+  onChange={handleSearchChange}
+  sx={{
+    margin: '3px',
+    width: '200px', 
+    marginTop:'13px',
+    '& .MuiInputBase-root': {
+      padding: '4px', 
+      height: '32px', 
+      backgroundColor:'#f3f3f3',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderRadius: '3', 
+      },
+    },
+  }}
+  InputProps={{
+    endAdornment: <SearchIcon />,
+    style: { fontSize: '14px' } 
+  }}
+/>
 
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: '#1e293b',
-          margin: '3px',
-          marginTop: '15px',
-          '&:hover': {
-            backgroundColor: '#1e293b'
-          }
-        }}
-        onClick={handleOpenAddTaskDialog}
-      >
-        <AddIcon />
-      </Button>
+
+
+<Button
+  variant="contained"
+  sx={{
+    backgroundColor: '#1e293b',
+    margin: '3px',
+    marginTop: '15px',
+    minWidth: '32px',   // Adjust the minWidth as needed
+    minHeight: '32px',  // Adjust the minHeight as needed
+    padding: '4px',     // Adjust the padding as needed
+    width: 'auto',      // Optionally set a fixed width
+    height: 'auto',     // Optionally set a fixed height
+    '&:hover': {
+      backgroundColor: '#1e293b'
+    }
+  }}
+  onClick={handleOpenAddTaskDialog}
+>
+  <AddIcon />
+</Button>
 
       <TableContainer component={Paper} sx={{ minWidth: 300 }}>
         <Table sx={{ minWidth: 300 }} aria-label="customized table">
@@ -227,6 +252,7 @@ function EmployeeList() {
               <StyledTableCell>Department Id</StyledTableCell>
               <StyledTableCell>Employee Email</StyledTableCell>
               <StyledTableCell>Employee Contact no</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
               <StyledTableCell>Action</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -247,6 +273,7 @@ function EmployeeList() {
                 <StyledTableCell>{item.department_id}</StyledTableCell>
                 <StyledTableCell>{item.employee_email}</StyledTableCell>
                 <StyledTableCell>{item.employee_contactno}</StyledTableCell>
+                <StyledTableCell sx={{ color: item.status === 'Active' ? '#22c55e' : '#ef4444' }}>{item.status}</StyledTableCell>
                 <StyledTableCell>
                   <EditIcon sx={{ color: '#1e293b', fontSize: '20px' }} onClick={() => handleOpenEditDialog(item)} />
                   <DeleteIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }} onClick={() => deleteapi(item.employee_id)} />
@@ -301,6 +328,18 @@ function EmployeeList() {
               fullWidth
               margin="normal"
             />
+             <FormControl fullWidth margin="normal">
+  <InputLabel>Status</InputLabel>
+  <Select
+    name="status"
+    value={editFormData.status}
+    onChange={handleEditTaskChange}
+    label="Status"
+  >
+    <MenuItem value="Active">Active</MenuItem>
+    <MenuItem value="Deactive">Deactive</MenuItem>
+  </Select>
+</FormControl>
             <DialogActions>
               <Button onClick={handleCloseAddTaskDialog} sx={{ color: 'black' }}>Cancel</Button>
               <Button type="submit" color="primary" sx={{ color: 'black' }}>Submit</Button>
@@ -353,6 +392,18 @@ function EmployeeList() {
               fullWidth
               margin="normal"
             />
+            <FormControl fullWidth margin="normal">
+  <InputLabel>Status</InputLabel>
+  <Select
+    name="status"
+    value={editFormData.status}
+    onChange={handleEditTaskChange}
+    label="Status"
+  >
+    <MenuItem value="Active">Active</MenuItem>
+    <MenuItem value="Deactive">Deactive</MenuItem>
+  </Select>
+</FormControl>
             <DialogActions>
               <Button onClick={handleCloseEditDialog} sx={{ color: 'black' }}>Cancel</Button>
               <Button type="submit" color="primary" sx={{ color: 'black' }}>Update</Button>

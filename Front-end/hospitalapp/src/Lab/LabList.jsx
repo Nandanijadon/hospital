@@ -188,31 +188,53 @@ function LabList() {
 
   return (
     <>
-      <CustomTextField
-        variant="outlined"
-        placeholder="Search by Lab Name..."
-        value={searchQuery}
-        onChange={handleSearchChange}
-        sx={{ margin: '3px', backgroundColor: '#f3f3f3' }}
-        InputProps={{
-          endAdornment: <SearchIcon />
-        }}
-      />
+    <CustomTextField
+  variant="outlined"
+  placeholder="Search by Lab Name..."
+  value={searchQuery}
+  onChange={handleSearchChange}
+  sx={{
+    margin: '3px',
+    width: '200px', 
+    marginTop:'13px',
+    '& .MuiInputBase-root': {
+      padding: '4px', 
+      height: '32px', 
+      backgroundColor:'#f3f3f3',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderRadius: '3', 
+      },
+    },
+  }}
+  InputProps={{
+    endAdornment: <SearchIcon />,
+    style: { fontSize: '14px' } 
+  }}
+/>
 
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: '#1e293b',
-          margin: '3px',
-          marginTop: '15px',
-          '&:hover': {
-            backgroundColor: '#1e293b'
-          }
-        }}
-        onClick={handleOpenAddTaskDialog}
-      >
-        <AddIcon />
-      </Button>
+
+
+<Button
+  variant="contained"
+  sx={{
+    backgroundColor: '#1e293b',
+    margin: '3px',
+    marginTop: '15px',
+    minWidth: '32px',   // Adjust the minWidth as needed
+    minHeight: '32px',  // Adjust the minHeight as needed
+    padding: '4px',     // Adjust the padding as needed
+    width: 'auto',      // Optionally set a fixed width
+    height: 'auto',     // Optionally set a fixed height
+    '&:hover': {
+      backgroundColor: '#1e293b'
+    }
+  }}
+  onClick={handleOpenAddTaskDialog}
+>
+  <AddIcon />
+</Button>
 
       <TableContainer component={Paper} sx={{ minWidth: 300 }}>
         <Table sx={{ minWidth: 300 }} aria-label="customized table">

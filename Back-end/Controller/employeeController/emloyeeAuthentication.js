@@ -11,7 +11,9 @@ const employee = joi.object({
     employee_email:
     joi.string().min(20).max(30).required(),
     employee_contactno:
-    joi.string().min(10).max(10).required()
+    joi.string().min(10).max(10).required(),
+    status:
+    joi.string().min(2).max(50).required()
 
 })
 

@@ -21,11 +21,11 @@ const getdepartment = async( req,res)=>{
 
 const postdepartment = async(req,res)=>{
     
-    let {department_id, department_name, department_est_date, room_id} = req.body;
+    let {department_id, department_name, department_est_date, room_id, status} = req.body;
      
-    const query = 'INSERT INTO department (department_id, department_name, department_est_date, room_id) values($1,$2,$3,$4) ';
+    const query = 'INSERT INTO department (department_id, department_name, department_est_date, room_id, status) values($1,$2,$3,$4,$5) ';
 
-    await connection.query(query,[department_id, department_name, department_est_date, room_id], (err,result)=>{
+    await connection.query(query,[department_id, department_name, department_est_date, room_id, status], (err,result)=>{
 
         if(err){
 
@@ -58,11 +58,11 @@ const deletedepartment = async (req,res)=>{
 const putdepartment = async (req,res)=>{
     let department_id = req.params.department_id;
 
-    let{department_name, department_est_date,room_id} = req.body
+    let{department_name, department_est_date,room_id, status} = req.body
 
-    let query = 'UPDATE department SET department_name = $1, department_est_date= $2, room_id = $3 WHERE department_id = $4';
+    let query = 'UPDATE department SET department_name = $1, department_est_date= $2, room_id = $3, status = $4 WHERE department_id = $5';
 
-    await connection.query(query, [department_name, department_est_date,room_id,department_id ], (err,result)=>{
+    await connection.query(query, [department_name, department_est_date,room_id,status,department_id ], (err,result)=>{
 
         if(err){
 

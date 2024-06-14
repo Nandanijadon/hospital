@@ -10,6 +10,8 @@ const department = joi.object({
     joi.date().required(),
     room_id:
     joi.string().min(2).max(10).required(), 
+    status:
+    joi.string().min(1).max(50).required()
 
 
 })

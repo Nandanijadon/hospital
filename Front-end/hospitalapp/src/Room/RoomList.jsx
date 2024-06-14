@@ -20,6 +20,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 
 
@@ -42,7 +43,6 @@ const CustomTextField = styled(TextField)({
     },
   },
 });
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -67,18 +67,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   height: '40px', // Adjust the height for the rows
 }));
 
-
-
 const Room = () => {
   const [openAddTaskDialog, setOpenAddTaskDialog] = useState(false);
   const [openEditTaskDialog, setOpenEditTaskDialog] = useState(false);
   const [formData, setFormData] = useState({
     room_id: '',
-    room_name: ''
+    room_name: '',
+    status: ''
   });
   const [editFormData, setEditFormData] = useState({
     room_id: '',
-    room_name: ''
+    room_name: '',
+    status: ''
   });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -173,36 +173,50 @@ const Room = () => {
   const endIndex = startIndex + itemsPerPage;
 
   const filteredData = data.filter(item =>
-    item.room_name.toLowerCase().includes(searchQuery.toLowerCase())
-    
-   
+    item.room_name && item.room_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const currentData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
-
-
-
-<CustomTextField
+      <CustomTextField
         variant="outlined"
         placeholder="Search by Room Name..."
         value={searchQuery}
         onChange={handleSearchChange}
-        sx={{ margin: '3px' }}
+        sx={{
+          margin: '3px',
+          width: '200px', 
+          marginTop: '13px',
+          '& .MuiInputBase-root': {
+            padding: '4px', 
+            height: '32px', 
+            backgroundColor: '#f3f3f3',
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderRadius: '3', 
+            },
+          },
+        }}
         InputProps={{
-          endAdornment: <SearchIcon />
+          endAdornment: <SearchIcon />,
+          style: { fontSize: '14px' } 
         }}
       />
-
 
       <Button
         variant="contained"
         sx={{
           backgroundColor: '#1e293b',
           margin: '3px',
-          marginTop:'15px',
+          marginTop: '15px',
+          minWidth: '32px',  
+          minHeight: '32px',  
+          padding: '4px',   
+          width: 'auto',    
+          height: 'auto',    
           '&:hover': {
             backgroundColor: '#1e293b'
           }
@@ -211,32 +225,31 @@ const Room = () => {
       >
         <AddIcon />
       </Button>
-  
-     
+
       <TableContainer component={Paper} sx={{ minWidth: 300 }}>
         <Table sx={{ minWidth: 300 }} aria-label="customized table">
           <TableHead>
-            <TableRow sx={{ backgroundColor: '#475569'}}>
+            <TableRow sx={{ backgroundColor: '#475569' }}>
               <StyledTableCell sx={{ color: '#ffffff' }}>Sno</StyledTableCell>
               <StyledTableCell sx={{ color: '#ffffff' }}>Room id</StyledTableCell>
               <StyledTableCell sx={{ color: '#ffffff' }}>Room Name</StyledTableCell>
+              <StyledTableCell sx={{ color: '#ffffff' }}>Status</StyledTableCell>
               <StyledTableCell sx={{ color: '#ffffff' }}>Action</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {currentData.map((item, index) => (
-              <StyledTableRow key={index + 1} sx= {{ backgroundColor:'#f3f3f3','&:hover': {
-                backgroundColor: '#e2e8f0'  
-
-                
-              }}} >
-                <StyledTableCell >{startIndex + index + 1}</StyledTableCell>
+              <StyledTableRow key={index + 1} sx={{ backgroundColor: '#f3f3f3', '&:hover': { backgroundColor: '#e2e8f0' } }}>
+                <StyledTableCell>{startIndex + index + 1}</StyledTableCell>
                 <StyledTableCell>{item.room_id}</StyledTableCell>
                 <StyledTableCell>{item.room_name}</StyledTableCell>
+                <StyledTableCell sx={{ color: item.status === 'Active' ? '#22c55e' : '#ef4444' }}>
+                  {item.status}
+                </StyledTableCell>
                 <StyledTableCell>
                   <EditIcon
                     onClick={() => handleOpenEditTaskDialog(item)}
-                    sx={{ Color: '#1e293b',fontSize:'20px' }}
+                    sx={{ color: '#1e293b', fontSize: '20px' }}
                   />
                 </StyledTableCell>
               </StyledTableRow>
@@ -245,8 +258,8 @@ const Room = () => {
         </Table>
       </TableContainer>
 
-      <Dialog open={openAddTaskDialog} onClose={handleCloseAddTaskDialog} >
-        <DialogTitle >Assign New Room</DialogTitle>
+      <Dialog open={openAddTaskDialog} onClose={handleCloseAddTaskDialog}>
+        <DialogTitle>Assign New Room</DialogTitle>
         <DialogContent>
           <form onSubmit={handleAddTaskSubmit}>
             <CustomTextField
@@ -265,9 +278,21 @@ const Room = () => {
               fullWidth
               margin="normal"
             />
+           <FormControl fullWidth margin="normal">
+  <InputLabel>Status</InputLabel>
+  <Select
+    name="status"
+    value={editFormData.status}
+    onChange={handleEditTaskChange}
+    label="Status"
+  >
+    <MenuItem value="Active">Active</MenuItem>
+    <MenuItem value="Deactive">Deactive</MenuItem>
+  </Select>
+</FormControl>
             <DialogActions>
-              <Button onClick={handleCloseAddTaskDialog} sx={{color:'black'}}>Cancel</Button>
-              <Button type="submit" color="primary" sx={{color:'black'}}>Submit</Button>
+              <Button onClick={handleCloseAddTaskDialog} sx={{ color: 'black' }}>Cancel</Button>
+              <Button type="submit" color="primary" sx={{ color: 'black' }}>Submit</Button>
             </DialogActions>
           </form>
         </DialogContent>
@@ -293,15 +318,28 @@ const Room = () => {
               fullWidth
               margin="normal"
             />
+           <FormControl fullWidth margin="normal">
+  <InputLabel>Status</InputLabel>
+  <Select
+    name="status"
+    value={editFormData.status}
+    onChange={handleEditTaskChange}
+    label="Status"
+  >
+    <MenuItem value="Active">Active</MenuItem>
+    <MenuItem value="Deactive">Deactive</MenuItem>
+  </Select>
+</FormControl>
+
             <DialogActions>
-              <Button onClick={handleCloseEditTaskDialog} sx={{color:'black'}}>Cancel</Button>
-              <Button type="submit" color="primary" sx={{color:'black'}}>Submit</Button>
+              <Button onClick={handleCloseEditTaskDialog} sx={{ color: 'black' }}>Cancel</Button>
+              <Button type="submit" color="primary" sx={{ color: 'black' }}>Submit</Button>
             </DialogActions>
           </form>
         </DialogContent>
       </Dialog>
 
-      <Stack spacing={2} sx={{ marginTop: 2 , alignItems:'end' }}>
+      <Stack spacing={2} sx={{ marginTop: 2, alignItems: 'end' }}>
         <Pagination
           count={Math.ceil(filteredData.length / itemsPerPage)}
           page={currentPage}

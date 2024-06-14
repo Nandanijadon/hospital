@@ -85,7 +85,8 @@ function EmployeeProfileList() {
     salary: '',
     date_of_joining: '',
     date_of_birth: '',
-    department_id: ''
+    department_id: '',
+    image:''
   });
 
   const fetchData = async () => {
@@ -128,7 +129,8 @@ function EmployeeProfileList() {
     salary: '',
     date_of_joining: '',
     date_of_birth: '',
-    department_id: ''
+    department_id: '',
+    image:''
 
   });
 
@@ -216,30 +218,50 @@ function EmployeeProfileList() {
   return (
     <>
       <CustomTextField
-        variant="outlined"
-        placeholder="Search by Profile Name..."
-        value={searchQuery}
-        onChange={handleSearchChange}
-        sx={{ margin: '3px', backgroundColor: '#f3f3f3' }}
-        InputProps={{
-          endAdornment: <SearchIcon />
-        }}
-      />
+  variant="outlined"
+  placeholder="Search by Profile Name..."
+  value={searchQuery}
+  onChange={handleSearchChange}
+  sx={{
+    margin: '3px',
+    width: '200px', 
+    marginTop:'13px',
+    '& .MuiInputBase-root': {
+      padding: '4px', 
+      height: '32px', 
+      backgroundColor:'#f3f3f3',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderRadius: '3', 
+      },
+    },
+  }}
+  InputProps={{
+    endAdornment: <SearchIcon />,
+    style: { fontSize: '14px' } 
+  }}
+/>
 
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: '#1e293b',
-          margin: '3px',
-          marginTop: '15px',
-          '&:hover': {
-            backgroundColor: '#1e293b'
-          }
-        }}
-        onClick={handleOpenAddTaskDialog}
-      >
-        <AddIcon />
-      </Button>
+<Button
+  variant="contained"
+  sx={{
+    backgroundColor: '#1e293b',
+    margin: '3px',
+    marginTop: '15px',
+    minWidth: '32px',   // Adjust the minWidth as needed
+    minHeight: '32px',  // Adjust the minHeight as needed
+    padding: '4px',     // Adjust the padding as needed
+    width: 'auto',      // Optionally set a fixed width
+    height: 'auto',     // Optionally set a fixed height
+    '&:hover': {
+      backgroundColor: '#1e293b'
+    }
+  }}
+  onClick={handleOpenAddTaskDialog}
+>
+  <AddIcon />
+</Button>
 
       <TableContainer component={Paper} sx={{ minWidth: 300 }}>
         <Table sx={{ minWidth: 300 }} aria-label="customized table">
@@ -256,6 +278,7 @@ function EmployeeProfileList() {
               <StyledTableCell>Date of joining</StyledTableCell>
               <StyledTableCell>Date Of Birth</StyledTableCell>
               <StyledTableCell>Department Id</StyledTableCell>
+              <StyledTableCell>Image</StyledTableCell>
               <StyledTableCell>Action</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -281,6 +304,7 @@ function EmployeeProfileList() {
                 <StyledTableCell>{item.date_of_joining}</StyledTableCell>
                 <StyledTableCell>{item.date_of_birth}</StyledTableCell>
                 <StyledTableCell>{item.department_id}</StyledTableCell>
+                <StyledTableCell>{item.image}</StyledTableCell>
                 <StyledTableCell>
                   <EditIcon sx={{ color: '#1e293b', fontSize: '20px' }} onClick={() => handleOpenEditDialog(item)} />
                   <DeleteIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }} onClick={() => deleteapi(item.profile_id)} />
@@ -380,6 +404,14 @@ function EmployeeProfileList() {
               name="department_id"
               label="Department Id"
               value={formData.department_id}
+              onChange={handleAddTaskChange}
+              fullWidth
+              margin="normal"
+            />
+              <CustomTextField
+              name="image"
+              label="Image"
+              value={formData.image}
               onChange={handleAddTaskChange}
               fullWidth
               margin="normal"
@@ -485,6 +517,14 @@ function EmployeeProfileList() {
               fullWidth
               margin="normal"
             />
+             <CustomTextField
+              name="image"
+              label="Image"
+              value={editFormData.image}
+              onChange={handleEditTaskChange}
+              fullWidth
+              margin="normal"
+            />
             <DialogActions>
               <Button onClick={handleCloseEditDialog} sx={{ color: 'black' }}>Cancel</Button>
               <Button type="submit" color="primary" sx={{ color: 'black' }}>Update</Button>
@@ -502,8 +542,8 @@ function EmployeeProfileList() {
           showLastButton
         />
       </Stack>
-    </>
+    </>         
   );
 }
-
+                       
 export default EmployeeProfileList;

@@ -3,7 +3,7 @@ const express = require('express');
 const employeeprofileroute = express.Router();
 
 const {getemployeeprofile, postemployeeprofile,deleteemployeeprofile,putemployeeprofile} = require('../../Controller/employeeprofileController/employeeprofileController');
-const { employeeprofileValidatde } = require('../../Controller/employeeprofileController/employeeprofileAuthenitication');
+// const { employeeprofileValidatde } = require('../../Controller/employeeprofileController/employeeprofileAuthenitication');
 
 /**
  * @swagger
@@ -112,7 +112,7 @@ const { employeeprofileValidatde } = require('../../Controller/employeeprofileCo
 
 
 employeeprofileroute.get('/getemployeeprofile', getemployeeprofile);
-employeeprofileroute.post('/postemployeeprofile', employeeprofileValidatde, postemployeeprofile );
+employeeprofileroute.post('/postemployeeprofile', postemployeeprofile );
 employeeprofileroute.delete('/deleteemployeeprofile/:profile_id', deleteemployeeprofile );
 employeeprofileroute.put('/putemployeeprofile/:profile_id',  putemployeeprofile);
 

@@ -19,10 +19,10 @@ const getroom = async (req, res) => {
 
 const postroom = async(req,res)=>{
 
-    let {room_id, room_name} = req.body;
-    let query= 'INSERT INTO room (room_id, room_name) values($1,$2)';
+    let {room_id, room_name, status} = req.body;
+    let query= 'INSERT INTO room (room_id, room_name, status) values($1,$2,$3)';
 
-    await connection.query(query,[room_id, room_name],(err,result)=>{
+    await connection.query(query,[room_id, room_name, status],(err,result)=>{
         if(err){
             console.error('Error executing query:', err.message);
         }
@@ -54,11 +54,11 @@ const deleteroom = async(req,res)=>{
 
 const putroom = async(req,res)=>{
     let room_id= req.params.room_id;
-    let {room_name} = req.body;
+    let {room_name, status} = req.body;
    
-    let query = 'update room SET room_name = $1 Where room_id = $2';
+    let query = 'update room SET room_name = $1,status = $2 Where room_id = $3';
 
-    connection.query(query,[room_name, room_id], (error,result)=>{
+    connection.query(query,[room_name, status, room_id], (error,result)=>{
  
         if(error){
             console.error('Error executing query:', error.message);

@@ -198,31 +198,53 @@ function PatientList() {
 
   return (
     <>
-      <CustomTextField
-        variant="outlined"
-        placeholder="Search by Patient Name..."
-        value={searchQuery}
-        onChange={handleSearchChange}
-        sx={{ margin: '3px', backgroundColor: '#f3f3f3' }}
-        InputProps={{
-          endAdornment: <SearchIcon />
-        }}
-      />
+       <CustomTextField
+  variant="outlined"
+  placeholder="Search by Patient Name..."
+  value={searchQuery}
+  onChange={handleSearchChange}
+  sx={{
+    margin: '3px',
+    width: '200px', 
+    marginTop:'13px',
+    '& .MuiInputBase-root': {
+      padding: '4px', 
+      height: '32px', 
+      backgroundColor:'#f3f3f3',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderRadius: '3', 
+      },
+    },
+  }}
+  InputProps={{
+    endAdornment: <SearchIcon />,
+    style: { fontSize: '14px' } 
+  }}
+/>
 
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: '#1e293b',
-          margin: '3px',
-          marginTop: '15px',
-          '&:hover': {
-            backgroundColor: '#1e293b'
-          }
-        }}
-        onClick={handleOpenAddTaskDialog}
-      >
-        <AddIcon />
-      </Button>
+
+
+<Button
+  variant="contained"
+  sx={{
+    backgroundColor: '#1e293b',
+    margin: '3px',
+    marginTop: '15px',
+    minWidth: '32px',  
+    minHeight: '32px',  
+    padding: '4px',  
+    width: 'auto',    
+    height: 'auto',    
+    '&:hover': {
+      backgroundColor: '#1e293b'
+    }
+  }}
+  onClick={handleOpenAddTaskDialog}
+>
+  <AddIcon />
+</Button>
 
       <TableContainer component={Paper} sx={{ minWidth: 300 }}>
         <Table sx={{ minWidth: 300 }} aria-label="customized table">

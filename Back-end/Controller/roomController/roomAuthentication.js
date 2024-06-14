@@ -5,7 +5,9 @@ const room = joi.object({
     room_id:
     joi.string().min(2).max(20).required(),
     room_name:
-    joi.string().min(1).max(50).required()
+    joi.string().min(1).max(50).required(),
+    status:
+    joi.string().min(1).max(50),
 })
 
 const validateroom = (req,res,next)=>{

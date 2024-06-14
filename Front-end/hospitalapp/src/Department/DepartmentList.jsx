@@ -21,24 +21,25 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
 import SearchIcon from '@mui/icons-material/Search';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 
 const CustomTextField = styled(TextField)({
   '& label.Mui-focused': {
-    color: '#1b1d1b', 
+    color: '#1b1d1b',
   },
   '& .MuiInput-underline:after': {
-    borderBottomColor: '#151529', 
+    borderBottomColor: '#151529',
   },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      borderColor: 'black', 
+      borderColor: 'black',
     },
     '&:hover fieldset': {
-      borderColor: 'gray', 
+      borderColor: 'gray',
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#282738', 
+      borderColor: '#282738',
     },
   },
 });
@@ -48,7 +49,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#475569',
     color: theme.palette.common.white,
-    padding: '6px 10px', 
+    padding: '6px 10px',
     height: '50px',
   },
   [`&.${tableCellClasses.body}`]: {
@@ -72,10 +73,11 @@ function DepartmentList() {
   const [data, setData] = useState([]);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [editFormData, setEditFormData] = useState({
-    department_id:'',
-    department_name:'',
-    department_est_date:'',
-    room_id:''
+    department_id: '',
+    department_name: '',
+    department_est_date: '',
+    room_id: '',
+    status: '',
   });
 
   const fetchData = async () => {
@@ -106,11 +108,12 @@ function DepartmentList() {
   };
 
   const [openAddTaskDialog, setOpenAddTaskDialog] = useState(false);
-  const [formData ,setFormData] = useState({
-    department_id:'',
-    department_name:'',
-    department_est_date:'',
-    room_id:''
+  const [formData, setFormData] = useState({
+    department_id: '',
+    department_name: '',
+    department_est_date: '',
+    room_id: '',
+    status: 'Active',
   });
 
   const postapi = (e) => {
@@ -138,6 +141,7 @@ function DepartmentList() {
         handleCloseEditDialog();
       });
   };
+  
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
@@ -186,6 +190,7 @@ function DepartmentList() {
     });
   };
 
+
   const handleEditTaskChange = (e) => {
     const { name, value } = e.target;
     setEditFormData({
@@ -194,18 +199,37 @@ function DepartmentList() {
     });
   };
 
+
   return (
     <>
+
       <CustomTextField
         variant="outlined"
         placeholder="Search by Department Name..."
         value={searchQuery}
         onChange={handleSearchChange}
-        sx={{ margin: '3px' , backgroundColor:'#f3f3f3'}}
+        sx={{
+          margin: '3px',
+          width: '200px',
+          marginTop: '13px',
+          '& .MuiInputBase-root': {
+            padding: '4px',
+            height: '32px',
+            backgroundColor: '#f3f3f3'
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderRadius: '3',
+            },
+          },
+        }}
         InputProps={{
-          endAdornment: <SearchIcon />
+          endAdornment: <SearchIcon />,
+          style: { fontSize: '14px' }
         }}
       />
+
+
 
       <Button
         variant="contained"
@@ -213,6 +237,11 @@ function DepartmentList() {
           backgroundColor: '#1e293b',
           margin: '3px',
           marginTop: '15px',
+          minWidth: '32px',
+          minHeight: '32px',
+          padding: '4px',
+          width: 'auto',
+          height: 'auto',
           '&:hover': {
             backgroundColor: '#1e293b'
           }
@@ -231,6 +260,7 @@ function DepartmentList() {
               <StyledTableCell>Department Name</StyledTableCell>
               <StyledTableCell>Department Establish Date</StyledTableCell>
               <StyledTableCell>Room Id</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
               <StyledTableCell>Action</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -250,6 +280,7 @@ function DepartmentList() {
                 <StyledTableCell>{item.department_name}</StyledTableCell>
                 <StyledTableCell>{item.department_est_date}</StyledTableCell>
                 <StyledTableCell>{item.room_id}</StyledTableCell>
+                <StyledTableCell sx={{ color: item.status === 'Active' ? '#22c55e' : '#ef4444' }}>{item.status}</StyledTableCell>
                 <StyledTableCell>
                   <EditIcon sx={{ color: '#1e293b', fontSize: '20px' }} onClick={() => handleOpenEditDialog(item)} />
                   <DeleteIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }} onClick={() => deleteapi(item.department_id)} />
@@ -261,7 +292,7 @@ function DepartmentList() {
       </TableContainer>
 
       <Dialog open={openAddTaskDialog} onClose={handleCloseAddTaskDialog}>
-        <DialogTitle>Assign New Room</DialogTitle>
+        <DialogTitle>Assign New Department</DialogTitle>
         <DialogContent>
           <form onSubmit={postapi}>
             <CustomTextField
@@ -280,13 +311,17 @@ function DepartmentList() {
               fullWidth
               margin="normal"
             />
-            <ustomTextField
+            <CustomTextField
               name="department_est_date"
               label="Department Establish Date"
               value={formData.department_est_date}
+              type='date'
               onChange={handleAddTaskChange}
               fullWidth
               margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <CustomTextField
               name="room_id"
@@ -296,9 +331,21 @@ function DepartmentList() {
               fullWidth
               margin="normal"
             />
+           <FormControl fullWidth margin="normal">
+  <InputLabel>Status</InputLabel>
+  <Select
+    name="status"
+    value={editFormData.status}
+    onChange={handleEditTaskChange}
+    label="Status"
+  >
+    <MenuItem value="Active">Active</MenuItem>
+    <MenuItem value="Deactive">Deactive</MenuItem>
+  </Select>
+</FormControl>
             <DialogActions>
-              <Button onClick={handleCloseAddTaskDialog} sx={{color:'black'}}>Cancel</Button>
-              <Button type="submit" color="primary" sx={{color:'black'}}>Submit</Button>
+              <Button onClick={handleCloseAddTaskDialog} sx={{ color: 'black' }}>Cancel</Button>
+              <Button type="submit" color="primary" sx={{ color: 'black' }}>Submit</Button>
             </DialogActions>
           </form>
         </DialogContent>
@@ -328,9 +375,13 @@ function DepartmentList() {
               name="department_est_date"
               label="Department Establish Date"
               value={editFormData.department_est_date}
+              type='date'
               onChange={handleEditTaskChange}
               fullWidth
               margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <CustomTextField
               name="room_id"
@@ -340,15 +391,25 @@ function DepartmentList() {
               fullWidth
               margin="normal"
             />
+            <CustomTextField
+              name="status"
+              label="Status"
+              value={editFormData.status}
+              onChange={handleEditTaskChange}
+              fullWidth
+              margin="normal"
+            />
+
+
             <DialogActions>
-              <Button onClick={handleCloseEditDialog} sx={{color:'black'}}>Cancel</Button>
-              <Button type="submit" color="primary" sx={{color:'black'}}>Update</Button>
+              <Button onClick={handleCloseEditDialog} sx={{ color: 'black' }}>Cancel</Button>
+              <Button type="submit" color="primary" sx={{ color: 'black' }}>Update</Button>
             </DialogActions>
           </form>
         </DialogContent>
       </Dialog>
 
-      <Stack spacing={1} sx={{ marginTop: 2 , alignItems:'end' }}>
+      <Stack spacing={1} sx={{ marginTop: 2, alignItems: 'end' }}>
         <Pagination
           count={Math.ceil(filteredData.length / itemsPerPage)}
           page={currentPage}
