@@ -26,20 +26,20 @@ import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const CustomTextField = styled(TextField)({
   '& label.Mui-focused': {
-    color: '#1b1d1b', 
+    color: '#1b1d1b',
   },
   '& .MuiInput-underline:after': {
-    borderBottomColor: '#151529', 
+    borderBottomColor: '#151529',
   },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      borderColor: 'black', 
+      borderColor: 'black',
     },
     '&:hover fieldset': {
-      borderColor: 'gray', 
+      borderColor: 'gray',
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#282738', 
+      borderColor: '#282738',
     },
   },
 });
@@ -48,12 +48,12 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#475569',
     color: theme.palette.common.white,
-    padding: '6px 10px', 
+    padding: '6px 10px',
     height: '50px',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    padding: '6px 10px', // Adjust padding for body cells
+    padding: '6px 10px',
   },
 }));
 
@@ -82,7 +82,6 @@ const Room = () => {
   });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8; // Set the number of items per page
   const [searchQuery, setSearchQuery] = useState('');
@@ -93,9 +92,7 @@ const Room = () => {
       const res = await axios.get('http://localhost:6600/getroom');
       setData(res.data.rows);
     } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
+      console.log(err);
     }
   };
 
@@ -169,17 +166,23 @@ const Room = () => {
     setCurrentPage(1); // Reset to the first page when search query changes
   };
 
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
   const filteredData = data.filter(item =>
-    item.room_name && item.room_name.toLowerCase().includes(searchQuery.toLowerCase())
+    (item.room_name && item.room_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    
+      (item.room_id && item.room_id.toLowerCase().includes(searchQuery.toLowerCase()))
+
   );
 
   const currentData = filteredData.slice(startIndex, endIndex);
 
   return (
     <div>
+
+
       <CustomTextField
         variant="outlined"
         placeholder="Search by Room Name..."
@@ -187,22 +190,22 @@ const Room = () => {
         onChange={handleSearchChange}
         sx={{
           margin: '3px',
-          width: '200px', 
+          width: '200px',
           marginTop: '13px',
           '& .MuiInputBase-root': {
-            padding: '4px', 
-            height: '32px', 
+            padding: '4px',
+            height: '32px',
             backgroundColor: '#f3f3f3',
           },
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
-              borderRadius: '3', 
+              borderRadius: '3',
             },
           },
         }}
         InputProps={{
           endAdornment: <SearchIcon />,
-          style: { fontSize: '14px' } 
+          style: { fontSize: '14px' }
         }}
       />
 
@@ -212,11 +215,11 @@ const Room = () => {
           backgroundColor: '#1e293b',
           margin: '3px',
           marginTop: '15px',
-          minWidth: '32px',  
-          minHeight: '32px',  
-          padding: '4px',   
-          width: 'auto',    
-          height: 'auto',    
+          minWidth: '32px',
+          minHeight: '32px',
+          padding: '4px',
+          width: 'auto',
+          height: 'auto',
           '&:hover': {
             backgroundColor: '#1e293b'
           }
@@ -278,18 +281,18 @@ const Room = () => {
               fullWidth
               margin="normal"
             />
-           <FormControl fullWidth margin="normal">
-  <InputLabel>Status</InputLabel>
-  <Select
-    name="status"
-    value={editFormData.status}
-    onChange={handleEditTaskChange}
-    label="Status"
-  >
-    <MenuItem value="Active">Active</MenuItem>
-    <MenuItem value="Deactive">Deactive</MenuItem>
-  </Select>
-</FormControl>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Status</InputLabel>
+              <Select
+                name="status"
+                value={editFormData.status}
+                onChange={handleEditTaskChange}
+                label="Status"
+              >
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Deactive">Deactive</MenuItem>
+              </Select>
+            </FormControl>
             <DialogActions>
               <Button onClick={handleCloseAddTaskDialog} sx={{ color: 'black' }}>Cancel</Button>
               <Button type="submit" color="primary" sx={{ color: 'black' }}>Submit</Button>
@@ -318,18 +321,18 @@ const Room = () => {
               fullWidth
               margin="normal"
             />
-           <FormControl fullWidth margin="normal">
-  <InputLabel>Status</InputLabel>
-  <Select
-    name="status"
-    value={editFormData.status}
-    onChange={handleEditTaskChange}
-    label="Status"
-  >
-    <MenuItem value="Active">Active</MenuItem>
-    <MenuItem value="Deactive">Deactive</MenuItem>
-  </Select>
-</FormControl>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Status</InputLabel>
+              <Select
+                name="status"
+                value={editFormData.status}
+                onChange={handleEditTaskChange}
+                label="Status"
+              >
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Deactive">Deactive</MenuItem>
+              </Select>
+            </FormControl>
 
             <DialogActions>
               <Button onClick={handleCloseEditTaskDialog} sx={{ color: 'black' }}>Cancel</Button>
@@ -353,3 +356,26 @@ const Room = () => {
 };
 
 export default Room;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

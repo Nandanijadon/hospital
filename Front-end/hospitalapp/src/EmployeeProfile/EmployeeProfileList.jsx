@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import axios from 'axios';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
@@ -21,9 +20,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
 import SearchIcon from '@mui/icons-material/Search';
-import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
-
-
+import axios from 'axios';
 
 const CustomTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -44,9 +41,6 @@ const CustomTextField = styled(TextField)({
     },
   },
 });
-
-
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -71,11 +65,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   height: '40px', // Adjust the height for the rows
 }));
 
-
 function EmployeeProfileList() {
-  const [data, setData] = useState([]);
-  const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [editFormData, setEditFormData] = useState({
+  const initialFormData = {
     profile_id: '',
     profile_name: '',
     age: '',
@@ -86,8 +77,26 @@ function EmployeeProfileList() {
     date_of_joining: '',
     date_of_birth: '',
     employee_id: '',
-    image:''
-  });
+    image: null, // file object for image
+  };
+
+  const initialEditFormData = {
+    profile_id: '',
+    profile_name: '',
+    age: '',
+    gender: '',
+    contact_no: '',
+    address: '',
+    salary: '',
+    date_of_joining: '',
+    date_of_birth: '',
+    employee_id: '',
+    image: null, // file object for image
+  };
+
+  const [data, setData] = useState([]);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [editFormData, setEditFormData] = useState(initialEditFormData);
 
   const fetchData = async () => {
     try {
@@ -119,24 +128,15 @@ function EmployeeProfileList() {
   };
 
   const [openAddTaskDialog, setOpenAddTaskDialog] = useState(false);
-  const [formData, setFormData] = useState({
-    profile_id: '',
-    profile_name: '',
-    age: '',
-    gender: '',
-    contact_no: '',
-    address: '',
-    salary: '',
-    date_of_joining: '',
-    date_of_birth: '',
-    employee_id: '',
-    image:''
-
-  });
+  const [formData, setFormData] = useState(initialFormData);
 
   const postapi = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:6600/postemployeeprofile", formData)
+    const formDataWithImage = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      formDataWithImage.append(key, value);
+    });
+    axios.post("http://localhost:6600/postemployeeprofile", formDataWithImage)
       .then(() => {
         fetchData();
         handleCloseAddTaskDialog();
@@ -149,7 +149,16 @@ function EmployeeProfileList() {
 
   const updateapi = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:6600/putemployeeprofile/${editFormData.profile_id}`, editFormData)
+    const formDataWithImage = new FormData();
+    Object.entries(editFormData).forEach(([key, value]) => {
+      if (key === 'image' && value === null) {
+        // If no new image is selected, retain the existing image
+        formDataWithImage.append(key, editFormData[key]);
+      } else {
+        formDataWithImage.append(key, value);
+      }
+    });
+    axios.put(`http://localhost:6600/putemployeeprofile/${editFormData.profile_id}`, formDataWithImage)
       .then(() => {
         fetchData();
         handleCloseEditDialog();
@@ -174,7 +183,7 @@ function EmployeeProfileList() {
   const filteredData = data.filter(item =>
     item.profile_name && item.profile_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  
+
   const paginatedData = filteredData.slice(startIndex, endIndex);
 
   const handleSearchChange = (e) => {
@@ -188,15 +197,22 @@ function EmployeeProfileList() {
 
   const handleCloseAddTaskDialog = () => {
     setOpenAddTaskDialog(false);
+    setFormData({ ...initialFormData, image: null }); // Clear form data including image
   };
 
   const handleOpenEditDialog = (employeeprofile) => {
-    setEditFormData(employeeprofile);
+    setEditFormData({
+      ...employeeprofile,
+      date_of_joining: moment(employeeprofile.date_of_joining).format('YYYY-MM-DD'),
+      date_of_birth: moment(employeeprofile.date_of_birth).format('YYYY-MM-DD'),
+      image: null, // Reset image field for editing
+    });
     setOpenEditDialog(true);
   };
 
   const handleCloseEditDialog = () => {
     setOpenEditDialog(false);
+    setEditFormData({ ...initialEditFormData, image: null }); // Clear edit form data including image
   };
 
   const handleAddTaskChange = (e) => {
@@ -215,69 +231,80 @@ function EmployeeProfileList() {
     });
   };
 
+  const handleAddImageChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({ ...formData, image: file });
+  };
+
+  const handleEditImageChange = (e) => {
+    const file = e.target.files[0];
+    setEditFormData({ ...editFormData, image: file });
+  };
+
   return (
     <>
       <CustomTextField
-  variant="outlined"
-  placeholder="Search by Profile Name..."
-  value={searchQuery}
-  onChange={handleSearchChange}
-  sx={{
-    margin: '3px',
-    width: '200px', 
-    marginTop:'13px',
-    '& .MuiInputBase-root': {
-      padding: '4px', 
-      height: '32px', 
-      backgroundColor:'#f3f3f3',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderRadius: '3', 
-      },
-    },
-  }}
-  InputProps={{
-    endAdornment: <SearchIcon />,
-    style: { fontSize: '14px' } 
-  }}
-/>
+        variant="outlined"
+        placeholder="Search by Profile Name..."
+        value={searchQuery}
+        onChange={handleSearchChange}
+        sx={{
+          margin: '3px',
+          width: '200px',
+          marginTop: '13px',
+          '& .MuiInputBase-root': {
+            padding: '4px',
+            height: '32px',
+            backgroundColor: '#f3f3f3',
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderRadius: '3',
+            },
+          },
+        }}
+        InputProps={{
+          endAdornment: <SearchIcon />,
+          style: { fontSize: '14px' }
+        }}
+      />
 
-<Button
-  variant="contained"
-  sx={{
-    backgroundColor: '#1e293b',
-    margin: '3px',
-    marginTop: '15px',
-    minWidth: '32px',   // Adjust the minWidth as needed
-    minHeight: '32px',  // Adjust the minHeight as needed
-    padding: '4px',     // Adjust the padding as needed
-    width: 'auto',      // Optionally set a fixed width
-    height: 'auto',     // Optionally set a fixed height
-    '&:hover': {
-      backgroundColor: '#1e293b'
-    }
-  }}
-  onClick={handleOpenAddTaskDialog}
->
-  <AddIcon />
-</Button>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: '#1e293b',
+          margin: '3px',
+          marginTop: '15px',
+          minWidth: '32px',
+          minHeight: '32px',
+          padding: '4px',
+          width: 'auto',
+          height: 'auto',
+          '&:hover': {
+            backgroundColor: '#1e293b'
+          }
+        }}
+        onClick={handleOpenAddTaskDialog}
+      >
+        <AddIcon />
+      </Button>
 
       <TableContainer component={Paper} sx={{ minWidth: 300 }}>
         <Table sx={{ minWidth: 300 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Sno</StyledTableCell>  
-              <StyledTableCell>Profile Pic</StyledTableCell>
-              <StyledTableCell>Image</StyledTableCell>
+              <StyledTableCell>Sno</StyledTableCell>
+              <StyledTableCell>Profile Id</StyledTableCell>
+              <StyledTableCell>Profile Image</StyledTableCell>
               <StyledTableCell>Profile Name</StyledTableCell>
               <StyledTableCell>Age</StyledTableCell>
               <StyledTableCell>Gender</StyledTableCell>
               <StyledTableCell>Contact No</StyledTableCell>
+             
               <StyledTableCell>Address</StyledTableCell>
               <StyledTableCell>Salary</StyledTableCell>
-              <StyledTableCell>Date of joining</StyledTableCell>
-              <StyledTableCell>Date Of Birth</StyledTableCell>
+              <StyledTableCell>DOJ</StyledTableCell>
+              <StyledTableCell>DOB</StyledTableCell>
               <StyledTableCell>Employee Id</StyledTableCell>
               <StyledTableCell>Action</StyledTableCell>
             </TableRow>
@@ -295,7 +322,17 @@ function EmployeeProfileList() {
               >
                 <StyledTableCell>{startIndex + index + 1}</StyledTableCell>
                 <StyledTableCell>{item.profile_id}</StyledTableCell>
-                <StyledTableCell><img src={item.image} style={{ height: '40px' ,width:'40px', borderRadius:'50px'}}/></StyledTableCell>
+                <StyledTableCell>
+                  <img
+                    src={item.image}
+                    alt={item.profile_name}
+                    style={{
+                      height: '40px',
+                      width: '40px',
+                      borderRadius: '50%',
+                    }}
+                  />
+                </StyledTableCell>
                 <StyledTableCell>{item.profile_name}</StyledTableCell>
                 <StyledTableCell>{item.age}</StyledTableCell>
                 <StyledTableCell>{item.gender}</StyledTableCell>
@@ -305,10 +342,24 @@ function EmployeeProfileList() {
                 <StyledTableCell>{item.date_of_joining}</StyledTableCell>
                 <StyledTableCell>{item.date_of_birth}</StyledTableCell>
                 <StyledTableCell>{item.employee_id}</StyledTableCell>
-             
                 <StyledTableCell>
-                  <EditIcon sx={{ color: '#1e293b', fontSize: '20px' }} onClick={() => handleOpenEditDialog(item)} />
-                  <DeleteIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }} onClick={() => deleteapi(item.profile_id)}/>  
+                  <EditIcon
+                    sx={{
+                      color: '#1e293b',
+                      fontSize: '20px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => handleOpenEditDialog(item)}
+                  />
+                  <DeleteIcon
+                    sx={{
+                      color: '#1e293b',
+                      fontSize: '20px',
+                      marginLeft: '20px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => deleteapi(item.profile_id)}
+                  />
                 </StyledTableCell>
               </StyledTableRow>
             ))}
@@ -317,7 +368,7 @@ function EmployeeProfileList() {
       </TableContainer>
 
       <Dialog open={openAddTaskDialog} onClose={handleCloseAddTaskDialog}>
-        <DialogTitle>Assign New Room</DialogTitle>
+        <DialogTitle>Add New Employee Profile</DialogTitle>
         <DialogContent>
           <form onSubmit={postapi}>
             <CustomTextField
@@ -336,7 +387,7 @@ function EmployeeProfileList() {
               fullWidth
               margin="normal"
             />
-            <ustomTextField
+            <CustomTextField
               name="age"
               label="Age"
               value={formData.age}
@@ -344,7 +395,7 @@ function EmployeeProfileList() {
               fullWidth
               margin="normal"
             />
-          <CustomTextField
+            <CustomTextField
               name="gender"
               label="Gender"
               value={formData.gender}
@@ -400,33 +451,39 @@ function EmployeeProfileList() {
                 shrink: true,
               }}
             />
-
             <CustomTextField
-              name="department_id"
-              label="Department Id"
-              value={formData.department_id}
+              name="employee_id"
+              label="Employee Id"
+              value={formData.employee_id}
               onChange={handleAddTaskChange}
               fullWidth
               margin="normal"
             />
-              <CustomTextField
+            <CustomTextField
               name="image"
               label="Image"
-              value={formData.image}
-              onChange={handleAddTaskChange}
+              type="file"
+              onChange={handleAddImageChange}
               fullWidth
               margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <DialogActions>
-              <Button onClick={handleCloseAddTaskDialog} sx={{ color: 'black' }}>Cancel</Button>
-              <Button type="submit" color="primary" sx={{ color: 'black' }}>Submit</Button>
+              <Button onClick={handleCloseAddTaskDialog} sx={{ color: 'black' }}>
+                Cancel
+              </Button>
+              <Button type="submit" color="primary" sx={{ color: 'black' }}>
+                Submit
+              </Button>
             </DialogActions>
           </form>
         </DialogContent>
       </Dialog>
 
       <Dialog open={openEditDialog} onClose={handleCloseEditDialog}>
-        <DialogTitle>Edit Profile</DialogTitle>
+        <DialogTitle>Edit Employee Profile</DialogTitle>
         <DialogContent>
           <form onSubmit={updateapi}>
             <CustomTextField
@@ -453,8 +510,7 @@ function EmployeeProfileList() {
               fullWidth
               margin="normal"
             />
-           
-           <CustomTextField
+            <CustomTextField
               name="gender"
               label="Gender"
               value={editFormData.gender}
@@ -471,7 +527,7 @@ function EmployeeProfileList() {
               margin="normal"
             />
             <CustomTextField
-              name=" address"
+              name="address"
               label="Address"
               value={editFormData.address}
               onChange={handleEditTaskChange}
@@ -482,6 +538,7 @@ function EmployeeProfileList() {
               name="salary"
               label="Salary"
               value={editFormData.salary}
+              onChange={handleEditTaskChange}
               fullWidth
               margin="normal"
             />
@@ -489,7 +546,7 @@ function EmployeeProfileList() {
               name="date_of_joining"
               label="Date Of Joining"
               type="date"
-              value={formData.date_of_joining}
+              value={editFormData.date_of_joining}
               onChange={handleEditTaskChange}
               fullWidth
               margin="normal"
@@ -501,7 +558,7 @@ function EmployeeProfileList() {
               name="date_of_birth"
               label="Date Of Birth"
               type="date"
-              value={formData.date_of_birth}
+              value={editFormData.date_of_birth}
               onChange={handleEditTaskChange}
               fullWidth
               margin="normal"
@@ -509,26 +566,24 @@ function EmployeeProfileList() {
                 shrink: true,
               }}
             />
-
             <CustomTextField
-              name="department_id"
-              label="Department Id"
-              value={editFormData.department_id}
-              onChange={handleEditTaskChange}
-              fullWidth
-              margin="normal"
-            />
-             <CustomTextField
               name="image"
               label="Image"
-              value={editFormData.image}
-              onChange={handleEditTaskChange}
+              type="file"
+              onChange={handleEditImageChange}
               fullWidth
               margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <DialogActions>
-              <Button onClick={handleCloseEditDialog} sx={{ color: 'black' }}>Cancel</Button>
-              <Button type="submit" color="primary" sx={{ color: 'black' }}>Update</Button>
+              <Button onClick={handleCloseEditDialog} sx={{ color: 'black' }}>
+                Cancel
+              </Button>
+              <Button type="submit" color="primary" sx={{ color: 'black' }}>
+                Update
+              </Button>
             </DialogActions>
           </form>
         </DialogContent>
@@ -543,8 +598,8 @@ function EmployeeProfileList() {
           showLastButton
         />
       </Stack>
-    </>         
+    </>
   );
 }
-                       
+
 export default EmployeeProfileList;

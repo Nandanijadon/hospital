@@ -19,8 +19,11 @@ import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
+import PreviewIcon from '@mui/icons-material/Preview';
 import SearchIcon from '@mui/icons-material/Search';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+// import ViewProfile from '../ViewProfile';
+import { Link } from 'react-router-dom';
 
 const CustomTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -87,6 +90,30 @@ function EmployeeList() {
       console.log(err);
     }
   };
+   
+
+
+  // const fetchData1 = async () => {
+  //   try {
+  //     const res = await axios.get(`http://localhost:6600/getemployee1/${employee_id}`);
+      
+  //     setData(res.data.rows);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  const fetchData2 = async () => {
+    try {
+      const res = await axios.get('http://localhost:6600/getemployee2');
+      
+      setData(res.data.rows);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+
 
   useEffect(() => {
     fetchData();
@@ -109,8 +136,7 @@ function EmployeeList() {
     department_id: '',
     employee_email: ' ',
     employee_contactno: ' ',
-    status:'Active',
-    viewprofile:''
+    status:'Active'
   });
 
   const postapi = (e) => {
@@ -258,7 +284,7 @@ function EmployeeList() {
               <StyledTableCell>View Profile</StyledTableCell>
               <StyledTableCell>Action</StyledTableCell>
             </TableRow>
-          </TableHead>
+          </TableHead> 
           <TableBody>
             {paginatedData.map((item, index) => (
               <StyledTableRow
@@ -279,10 +305,12 @@ function EmployeeList() {
                 <StyledTableCell sx={{ color: item.status === 'Active' ? '#22c55e' : '#ef4444' }}>{item.status}</StyledTableCell>
 
                 <StyledTableCell>
-                 
-                  <DeleteIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }} onClick={() => deleteapi(item.employee_id)} />
+                  
+                 <Link to = {`/ViewProfile/${data.employee_id}`}>
+                  <PreviewIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }}  />
+                  </Link>
                 </StyledTableCell>
-            
+                
 
                 <StyledTableCell>
                   <EditIcon sx={{ color: '#1e293b', fontSize: '20px' }} onClick={() => handleOpenEditDialog(item)} />
@@ -421,6 +449,10 @@ function EmployeeList() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* ////////////////////// profile //////////////////////////////////////// */}
+
+
 
       <Stack spacing={1} sx={{ marginTop: 2, alignItems: 'end' }}>
         <Pagination
