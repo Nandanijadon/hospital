@@ -1,91 +1,106 @@
-import { ChartsLegend } from '@mui/x-charts/ChartsLegend';
-import react from 'react';
-import { useParams } from 'react-router-dom';
-// import axios from 'axios';
-function ViewProfile (){
-    const {employee_id} = useParams()
-    console.log(employee_id)
-    // const fetchData1 = async () => {
-    //     try {
-    //       const res = await axios.get(`http://localhost:6600/getemployee1/${employee_id}`);
-          
-    //       console.log(res.data.rows);
-    //     } catch (err) {
-    //       console.log(err);
-    //     }
-    //   };
-    return(
-        <div>
-        <section className="vh-100" style={{ backgroundColor: "#f4f5f7" }}>
-  <div className="container py-5 h-100">
-    <div className="row d-flex justify-content-center align-items-center h-100">
-      <div className="col col-lg-6 mb-4 mb-lg-0">
-        <div className="card mb-3" style={{ borderRadius: ".5rem" }}>
-          <div className="row g-0">
-            <div
-              className="col-md-4 gradient-custom text-center text-white"
-              style={{
-                borderTopLeftRadius: ".5rem",
-                borderBottomLeftRadius: ".5rem"
-              }}
-            >
-              <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                alt="Avatar"
-                className="img-fluid my-5"
-                style={{ width: 80 }}
-              />
-              <h5>Marie Horwitz</h5>
-              <p>Web Designer</p>
-              <i className="far fa-edit mb-5" />
-            </div>
-            <div className="col-md-8">
-              <div className="card-body p-4">
-                <h6>Information</h6>
-                <hr className="mt-0 mb-4" />
-                <div className="row pt-1">
-                  <div className="col-6 mb-3">
-                    <h6>Email</h6>
-                    <p className="text-muted">info@example.com</p>
-                  </div>
-                  <div className="col-6 mb-3">
-                    <h6>Phone</h6>
-                    <p className="text-muted">123 456 789</p>
-                  </div>
-                </div>
-                <h6>Projects</h6>
-                <hr className="mt-0 mb-4" />
-                <div className="row pt-1">
-                  <div className="col-6 mb-3">
-                    <h6>Recent</h6>
-                    <p className="text-muted">Lorem ipsum</p>
-                  </div>
-                  <div className="col-6 mb-3">
-                    <h6>Most Viewed</h6>
-                    <p className="text-muted">Dolor sit amet</p>
-                  </div>
-                </div>
-                <div className="d-flex justify-content-start">
-                  <a href="#!">
-                    <i className="fab fa-facebook-f fa-lg me-3" />
-                  </a>
-                  <a href="#!">
-                    <i className="fab fa-twitter fa-lg me-3" />
-                  </a>
-                  <a href="#!">
-                    <i className="fab fa-instagram fa-lg" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+import React, { useEffect, useState } from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import { Button, Card, CardContent, IconButton, Box, Typography } from '@mui/material';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import PreviewIcon from '@mui/icons-material/Preview';
 
-        </div>
-    )
+
+import CardMedia from '@mui/material/CardMedia';
+
+
+
+
+function ViewProfile({ employee_id }) {
+  const [profileData, setProfileData] = useState(null);
+  const [openProfileDialog, setOpenProfileDialog] = useState(false);
+
+  useEffect(() => {
+    function fetchData(employee_id) {
+      fetch(`http://localhost:6600/getemployeeprofile/${employee_id}`)
+        .then((res) => res.json())
+        .then((result) => setProfileData(result[0])) // Access the first element of the array
+        .catch((error) => console.error('Error fetching data:', error));
+    }
+
+    fetchData(employee_id);
+  }, [employee_id]);
+
+  const handleOpenProfileDialog = () => {
+    setOpenProfileDialog(true);
+  };
+
+  const handleCloseProfileDialog = () => {
+    setOpenProfileDialog(false);
+  };
+
+  if (!profileData) {
+    return null; // Render nothing while data is being fetched
+  }
+
+  return (
+    <div>
+      <PreviewIcon
+        sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }}
+        onClick={handleOpenProfileDialog}
+      />
+      <Dialog open={openProfileDialog} onClose={handleCloseProfileDialog} sx= {{backgroundColor:'#1e293b'}}>
+        <DialogTitle>Employee Profile</DialogTitle>
+        <DialogContent>
+          <Card sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <CardContent sx={{ flex: '1 0 auto' }}>
+                <Typography component="div" variant="h5">
+                  {profileData.profile_name}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary" component="div">
+                  Employee ID: {profileData.employee_id}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary" component="div">
+                  Age: {profileData.age}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary" component="div">
+                  Gender: {profileData.gender}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary" component="div">
+                  Contact No: {profileData.contact_no}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary" component="div">
+                  Address: {profileData.address}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary" component="div">
+                  Salary: {profileData.salary}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary" component="div">
+                  Date of Joining: {new Date(profileData.date_of_joining).toLocaleDateString()}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary" component="div">
+                  Date of Birth: {new Date(profileData.date_of_birth).toLocaleDateString()}
+                </Typography>
+              </CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+              
+              </Box>
+            </Box>
+            <CardMedia
+              component="img"
+              sx={{ width: 151, borderRadius: '50%' }}
+              height="140"
+              image={profileData.image}
+              alt="Employee Profile"
+            />
+          </Card>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseProfileDialog} sx={{ color: 'black' }}>Close</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }
-export default ViewProfile
+
+export default ViewProfile;

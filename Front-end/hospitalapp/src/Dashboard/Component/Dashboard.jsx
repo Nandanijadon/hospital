@@ -38,10 +38,6 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import { Container } from '@mui/material';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import Charts from './Charts';
-import Stack from '@mui/material/Stack';
-import { Gauge } from '@mui/x-charts/Gauge';
-
-import { Navigate } from 'react-router-dom';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 

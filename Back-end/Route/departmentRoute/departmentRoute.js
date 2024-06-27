@@ -3,7 +3,7 @@ const express = require('express');
 const departmentroute = express.Router();
 
 const {getdepartment, postdepartment,deletedepartment, putdepartment} = require('../../Controller/departmentController/departmentController');
-const { validatedeperatment } = require('../../Controller/departmentController/deartmentAuthentication');
+const { validatedeperatment } = require('../../Controller/departmentController/deartmentValidation');
 
 /**
  * @swagger
@@ -104,6 +104,7 @@ departmentroute.get('/getdepartment', getdepartment);
 departmentroute.post('/postdepartment',validatedeperatment,postdepartment);
 departmentroute.delete('/deletedepartment/:department_id', deletedepartment);
 departmentroute.put('/putdepartment/:department_id', putdepartment);
+departmentroute.get('/getdepartment1')
 
 
 

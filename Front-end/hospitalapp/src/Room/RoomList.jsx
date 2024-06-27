@@ -64,7 +64,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:last-child td, &:last-child th': {
     border: 0,
   },
-  height: '40px', // Adjust the height for the rows
+  height: '40px', 
 }));
 
 const Room = () => {
@@ -85,6 +85,8 @@ const Room = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8; // Set the number of items per page
   const [searchQuery, setSearchQuery] = useState('');
+
+  // reterival of data for server
 
   const fetchData = async () => {
     setLoading(true);

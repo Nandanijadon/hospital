@@ -1,6 +1,6 @@
 const express = require('express'); 
 const { getrole, postrole,deleterole, putrole} = require('../../Controller/roleController/roleController');
-const { validateRole } = require('../../Controller/roleController/roleAuthentication');
+const { validateRole } = require('../../Controller/roleController/roleValidation');
 
 roleroute = express.Router();
 

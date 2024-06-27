@@ -1,22 +1,33 @@
 
 const connection = require('../../Model/dbConnection');
 
-const getemployeeprofile = async( req,res)=>{
+const getemployeeprofile = async (req, res) => {
+    let employee_id = req.params.employee_id;
 
-    let query = 'SELECT * FROM employee_profile ORDER BY profile_id';
+    let query = "SELECT profile_id, profile_name, age, gender, contact_no, address, salary, date_of_joining, date_of_birth, image, employee_id FROM employee_profile WHERE employee_id = $1";
 
-    await connection.query(query,(err,result)=>{
-
-        if(err){
-            console.error('Error executing query:', err.message);
-        }  
-
-        else {
-
-            res.send(result);
+    try {
+        const result = await connection.query(query, [employee_id]);
+        if (result.rows.length === 0) {
+            return res.status(404).send({ message: 'Employee profile not found' });
         }
+        res.send(result.rows);
+    } catch (err) {
+        console.error('Error executing query:', err);
+        res.status(500).send({ message: 'Internal Server Error' });
+    }
+};
+
+const getallemployeeprofile = async (req, res) => {
+
+
+    let query = "SELECT * FROM employee_profile";
+
+    connection.query(query, (err, result) => {
+        res.send(result)
     })
-}
+};
+
 
 
 const postemployeeprofile = async (req, res) => {
@@ -107,4 +118,4 @@ const putemployeeprofile = async (req,res)=>{
     })
 }
 
-module.exports = {getemployeeprofile, postemployeeprofile,deleteemployeeprofile,putemployeeprofile};
+module.exports = {getemployeeprofile, postemployeeprofile,deleteemployeeprofile,putemployeeprofile, getallemployeeprofile};

@@ -24,30 +24,13 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MedicationLiquidIcon from '@mui/icons-material/MedicationLiquid';
-import BiotechIcon from '@mui/icons-material/Biotech';
 import SearchIcon from '@mui/icons-material/Search';
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
-
 import ScienceIcon from '@mui/icons-material/Science';
-import WorkIcon from '@mui/icons-material/Work';
-
-import MasksIcon from '@mui/icons-material/Masks';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
-import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-import { Container } from '@mui/material';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import Charts from './Charts';
-import Stack from '@mui/material/Stack';
-import { Gauge } from '@mui/x-charts/Gauge';
-
-import { Navigate } from 'react-router-dom';
 import { Outlet, useNavigate } from 'react-router-dom';
 import BusinessIcon from '@mui/icons-material/Business';
 
@@ -247,6 +230,11 @@ function Sidebar() {
   const handleAssignrole = ()=>{
     navigate('/assignrole')
   }
+
+  const handleAppointment = ()=>{
+    navigate('/appointment')
+  }
+ 
  
 
   
@@ -477,6 +465,22 @@ function Sidebar() {
               <ListItemIcon>
                    
                 {index === 0 && <HomeWorkIcon sx={{color:'white',fontSize:'22px'}} onClick={handleAssignrole}/>}
+               
+              </ListItemIcon>
+              <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />
+
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+
+      <List sx={{ backgroundColor:'#1e293b', color:'white',padding:0.3}}>
+        {['Appointment'].map((text, index) => (
+          <ListItem key={text} disablePadding onClick={handleAppointment}>
+            <ListItemButton>
+              <ListItemIcon>
+                   
+                {index === 0 && <MeetingRoomIcon sx={{color:'white',fontSize:'22px'}} onClick={handleAppointment}/>}
                
               </ListItemIcon>
               <ListItemText primary={text} primaryTypographyProps={{ variant: 'body2', fontSize: '15px' }} />

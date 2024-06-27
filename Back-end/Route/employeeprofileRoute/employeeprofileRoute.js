@@ -1,11 +1,10 @@
 const express = require('express');
-const {employeeprofileValidatde }= require('../../Controller/employeeprofileController/employeeprofileAuthenitication')
 
 const employeeprofileroute = express.Router();
 
-const {getemployeeprofile, postemployeeprofile,deleteemployeeprofile,putemployeeprofile} = require('../../Controller/employeeprofileController/employeeprofileController');
+const {getemployeeprofile, postemployeeprofile,deleteemployeeprofile,putemployeeprofile, getallemployeeprofile} = require('../../Controller/employeeprofileController/employeeprofileController');
 const upload = require('../../Multer/Multer');
-// const { employeeprofileValidatde } = require('../../Controller/employeeprofileController/employeeprofileAuthenitication');
+ const { employeeprofileValidatde } = require('../../Controller/employeeprofileController/employeeprofileValidation');
 
 /**
  * @swagger
@@ -113,7 +112,8 @@ const upload = require('../../Multer/Multer');
  */
 
 
-employeeprofileroute.get('/getemployeeprofile', getemployeeprofile);
+employeeprofileroute.get('/getemployeeprofile/:employee_id', getemployeeprofile);
+employeeprofileroute.get('/getallemployeeprofile', getallemployeeprofile);
 employeeprofileroute.post('/postemployeeprofile',employeeprofileValidatde,upload.single("image"),postemployeeprofile );
 employeeprofileroute.delete('/deleteemployeeprofile/:profile_id', deleteemployeeprofile );
 employeeprofileroute.put('/putemployeeprofile/:profile_id',  putemployeeprofile);

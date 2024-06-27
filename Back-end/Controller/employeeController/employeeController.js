@@ -18,6 +18,43 @@ const getemployee = async(req,res)=>{
     })
 }
 
+const getemployee1 = async(req,res)=>{
+ const employee_id = req.params.employee_id
+    let query =" SELECT employee.employee_id, assignrole.role_id, role.role_name FROM employee INNER JOIN assignrole on employee.employee_id = assignrole.employee_id INNER JOIN role on assignrole.role_id = role.role_id";
+
+    await connection.query(query,employee_id, (err,result)=>{
+
+        if(err){
+
+            console.error('err', err.message);
+
+        }
+
+        else{
+            res.send(result)
+        }
+    })
+}
+
+
+const getemployee2 = async(req,res)=>{
+const employee_id = req.params.employee_id
+    let query ="SELECT * FROM employee e JOIN employee_profile p ON e.employee_id = p.employee_id WHERE e.employee_id = $1";
+
+    await connection.query(query,[employee_id], (err,result)=>{
+
+        if(err){
+
+            console.error('err', err.message);
+
+        }
+
+        else{
+            res.send(result)
+        }
+    })
+}
+
 const postemployee = async (req,res)=>{
     const {employee_id, employee_name, department_id, employee_email, employee_contactno, status, viewprofile} = req.body;
 
@@ -76,4 +113,4 @@ const putemployee = async(req,res)=>{
     })
 }
 
-module.exports = {getemployee,postemployee,deleteemployee,putemployee};
+module.exports = {getemployee,postemployee,deleteemployee,putemployee,getemployee1,getemployee2};

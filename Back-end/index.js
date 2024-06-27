@@ -4,7 +4,7 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const cors = require('cors');
 
 const app = express();    
-const port = 6600;
+const port = 6600;  
 
 app.use(express.json());
 app.use(cors())

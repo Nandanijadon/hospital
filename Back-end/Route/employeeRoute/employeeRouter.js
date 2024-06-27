@@ -2,7 +2,7 @@ const express = require('express');
 
 employeeroute = express.Router();
 
-const {getemployee,postemployee,deleteemployee,putemployee}= require('../../Controller/employeeController/employeeController');
+const {getemployee,postemployee,deleteemployee,putemployee, getemployee1, getemployee2}= require('../../Controller/employeeController/employeeController');
 
 /**
  * @swagger
@@ -100,5 +100,7 @@ employeeroute.get('/getemployee',getemployee);
 employeeroute.post('/postemployee',postemployee);
 employeeroute.delete('/deleteemployee/:employee_id',deleteemployee);
 employeeroute.put('/putemployee/:employee_id',putemployee);
+employeeroute.get('/getemployee1', getemployee1)
+employeeroute.get('/getemployee2/:employee_id', getemployee2)
 
 module.exports = employeeroute;

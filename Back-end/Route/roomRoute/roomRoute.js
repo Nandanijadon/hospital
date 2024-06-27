@@ -3,7 +3,7 @@ const express = require('express');
 const roomroute = express.Router();
 
 const {getroom,postroom,deleteroom, putroom} = require('../../Controller/roomController/roomContoller');
-const { validateroom } = require('../../Controller/roomController/roomAuthentication');
+const { validateroom } = require('../../Controller/roomController/roomValidation');
 
 /**
  * @swagger

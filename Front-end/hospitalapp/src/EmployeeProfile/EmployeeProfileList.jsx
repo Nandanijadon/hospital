@@ -100,7 +100,7 @@ function EmployeeProfileList() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get('http://localhost:6600/getemployeeprofile');
+      const res = await axios.get('http://localhost:6600/getallemployeeprofile');
 
       const newData = res.data.rows.map(item => ({
         ...item,

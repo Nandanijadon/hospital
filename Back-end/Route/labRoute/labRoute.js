@@ -1,4 +1,4 @@
-const { validateLab } = require("../../Controller/labController/labAuthentication");
+const { validateLab } = require("../../Controller/labController/labValidation");
 const { getlab, postlab, deletelab, putlab } = require("../../Controller/labController/labCotroller");
 
 const express = require('express');

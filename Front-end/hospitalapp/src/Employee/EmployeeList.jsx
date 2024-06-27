@@ -19,11 +19,9 @@ import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
-import PreviewIcon from '@mui/icons-material/Preview';
 import SearchIcon from '@mui/icons-material/Search';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-// import ViewProfile from '../ViewProfile';
-import { Link } from 'react-router-dom';
+import ViewProfile from './ViewProfile';
 
 const CustomTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -54,7 +52,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    padding: '6px 10px', // Adjust padding for body cells
+    padding: '6px 10px',
   },
 }));
 
@@ -65,7 +63,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:last-child td, &:last-child th': {
     border: 0,
   },
-  height: '40px', // Adjust the height for the rows
+  height: '40px',
 }));
 
 function EmployeeList() {
@@ -78,46 +76,25 @@ function EmployeeList() {
     employee_email: ' ',
     employee_contactno: ' ',
     status:' ',
-    viewprofile:''
   });
+
+  const [openProfileDialog, setOpenProfileDialog] = useState(false);
+  const [profileData, setProfileData] = useState({});
 
   const fetchData = async () => {
     try {
       const res = await axios.get('http://localhost:6600/getemployee');
-      
       setData(res.data.rows);
     } catch (err) {
       console.log(err);
     }
   };
-   
-
-
-  // const fetchData1 = async () => {
-  //   try {
-  //     const res = await axios.get(`http://localhost:6600/getemployee1/${employee_id}`);
-      
-  //     setData(res.data.rows);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  const fetchData2 = async () => {
-    try {
-      const res = await axios.get('http://localhost:6600/getemployee2');
-      
-      setData(res.data.rows);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  
-
 
   useEffect(() => {
     fetchData();
   }, []);
+
+
 
   const deleteapi = (employee_id) => {
     axios.delete(`http://localhost:6600/deleteemployee/${employee_id}`)
@@ -220,55 +197,62 @@ function EmployeeList() {
     });
   };
 
+  const handleOpenProfileDialog = (employee) => {
+    setProfileData(employee);
+    setOpenProfileDialog(true);
+  };
+
+  const handleCloseProfileDialog = () => {
+    setOpenProfileDialog(false);
+  };
+
   return (
     <>
       <CustomTextField
-  variant="outlined"
-  placeholder="Search by Employee Name..."
-  value={searchQuery}
-  onChange={handleSearchChange}
-  sx={{
-    margin: '3px',
-    width: '200px', 
-    marginTop:'13px',
-    '& .MuiInputBase-root': {
-      padding: '4px', 
-      height: '32px', 
-      backgroundColor:'#f3f3f3',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderRadius: '3', 
-      },
-    },
-  }}
-  InputProps={{
-    endAdornment: <SearchIcon />,
-    style: { fontSize: '14px' } 
-  }}
-/>
+        variant="outlined"
+        placeholder="Search by Employee Name..."
+        value={searchQuery}
+        onChange={handleSearchChange}
+        sx={{
+          margin: '3px',
+          width: '200px',
+          marginTop: '13px',
+          '& .MuiInputBase-root': {
+            padding: '4px',
+            height: '32px',
+            backgroundColor: '#f3f3f3',
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderRadius: '3',
+            },
+          },
+        }}
+        InputProps={{
+          endAdornment: <SearchIcon />,
+          style: { fontSize: '14px' }
+        }}
+      />
 
-
-
-<Button
-  variant="contained"
-  sx={{
-    backgroundColor: '#1e293b',
-    margin: '3px',
-    marginTop: '15px',
-    minWidth: '32px',   // Adjust the minWidth as needed
-    minHeight: '32px',  // Adjust the minHeight as needed
-    padding: '4px',     // Adjust the padding as needed
-    width: 'auto',      // Optionally set a fixed width
-    height: 'auto',     // Optionally set a fixed height
-    '&:hover': {
-      backgroundColor: '#1e293b'
-    }
-  }}
-  onClick={handleOpenAddTaskDialog}
->
-  <AddIcon />
-</Button>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: '#1e293b',
+          margin: '3px',
+          marginTop: '15px',
+          minWidth: '32px',
+          minHeight: '32px',
+          padding: '4px',
+          width: 'auto',
+          height: 'auto',
+          '&:hover': {
+            backgroundColor: '#1e293b'
+          }
+        }}
+        onClick={handleOpenAddTaskDialog}
+      >
+        <AddIcon />
+      </Button>
 
       <TableContainer component={Paper} sx={{ minWidth: 300 }}>
         <Table sx={{ minWidth: 300 }} aria-label="customized table">
@@ -284,7 +268,7 @@ function EmployeeList() {
               <StyledTableCell>View Profile</StyledTableCell>
               <StyledTableCell>Action</StyledTableCell>
             </TableRow>
-          </TableHead> 
+          </TableHead>
           <TableBody>
             {paginatedData.map((item, index) => (
               <StyledTableRow
@@ -303,15 +287,13 @@ function EmployeeList() {
                 <StyledTableCell>{item.employee_email}</StyledTableCell>
                 <StyledTableCell>{item.employee_contactno}</StyledTableCell>
                 <StyledTableCell sx={{ color: item.status === 'Active' ? '#22c55e' : '#ef4444' }}>{item.status}</StyledTableCell>
-
                 <StyledTableCell>
-                  
-                 <Link to = {`/ViewProfile/${data.employee_id}`}>
-                  <PreviewIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }}  />
-                  </Link>
+                  {/* <PreviewIcon
+                    sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }}
+                    onClick={() => handleOpenProfileDialog(item)}
+                  /> */}
+                  <ViewProfile employee_id={item.employee_id}/>
                 </StyledTableCell>
-                
-
                 <StyledTableCell>
                   <EditIcon sx={{ color: '#1e293b', fontSize: '20px' }} onClick={() => handleOpenEditDialog(item)} />
                   <DeleteIcon sx={{ color: '#1e293b', fontSize: '20px', marginLeft: '20px' }} onClick={() => deleteapi(item.employee_id)} />
@@ -336,7 +318,7 @@ function EmployeeList() {
             />
             <CustomTextField
               name="employee_name"
-              label="Employee Name" 
+              label="Employee Name"
               value={formData.employee_name}
               onChange={handleAddTaskChange}
               fullWidth
@@ -344,7 +326,7 @@ function EmployeeList() {
             />
             <CustomTextField
               name="department_id"
-              label="Department Id" 
+              label="Department Id"
               value={formData.department_id}
               onChange={handleAddTaskChange}
               fullWidth
@@ -366,18 +348,18 @@ function EmployeeList() {
               fullWidth
               margin="normal"
             />
-             <FormControl fullWidth margin="normal">
-  <InputLabel>Status</InputLabel>
-  <Select
-    name="status"
-    value={editFormData.status}
-    onChange={handleEditTaskChange}
-    label="Status"
-  >
-    <MenuItem value="Active">Active</MenuItem>
-    <MenuItem value="Deactive">Deactive</MenuItem>
-  </Select>
-</FormControl>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Status</InputLabel>
+              <Select
+                name="status"
+                value={editFormData.status}
+                onChange={handleEditTaskChange}
+                label="Status"
+              >
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Deactive">Deactive</MenuItem>
+              </Select>
+            </FormControl>
             <DialogActions>
               <Button onClick={handleCloseAddTaskDialog} sx={{ color: 'black' }}>Cancel</Button>
               <Button type="submit" color="primary" sx={{ color: 'black' }}>Submit</Button>
@@ -431,17 +413,17 @@ function EmployeeList() {
               margin="normal"
             />
             <FormControl fullWidth margin="normal">
-  <InputLabel>Status</InputLabel>
-  <Select
-    name="status"
-    value={editFormData.status}
-    onChange={handleEditTaskChange}
-    label="Status"
-  >
-    <MenuItem value="Active">Active</MenuItem>
-    <MenuItem value="Deactive">Deactive</MenuItem>
-  </Select>
-</FormControl>
+              <InputLabel>Status</InputLabel>
+              <Select
+                name="status"
+                value={editFormData.status}
+                onChange={handleEditTaskChange}
+                label="Status"
+              >
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Deactive">Deactive</MenuItem>
+              </Select>
+            </FormControl>
             <DialogActions>
               <Button onClick={handleCloseEditDialog} sx={{ color: 'black' }}>Cancel</Button>
               <Button type="submit" color="primary" sx={{ color: 'black' }}>Update</Button>
@@ -450,9 +432,7 @@ function EmployeeList() {
         </DialogContent>
       </Dialog>
 
-      {/* ////////////////////// profile //////////////////////////////////////// */}
-
-
+    
 
       <Stack spacing={1} sx={{ marginTop: 2, alignItems: 'end' }}>
         <Pagination

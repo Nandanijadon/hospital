@@ -16,6 +16,9 @@ import HospitalTreatment from "./HospitalTreatment/HospitalTreatmentList";
 import Main from "./Dashboard/Component/Dashboard";
 import AssignroleList from "./Assignrole/AssignroleList";
 import ViewProfile from "./Employee/ViewProfile";
+import AppointmentList from "./Appointment/AppointmentList";
+import LoginList from "./Login/LoginList";
+
 //  import ViewProfile from "./Employee/ViewProfile";
 
 
@@ -42,6 +45,7 @@ function App() {
     <Route path='/employeeprofile'  element={<EmployeeProfile/>}></Route>
     <Route path='/hospitaltreatment'  element={<HospitalTreatment/>}></Route>
     <Route path='/assignrole'  element={<AssignroleList/>}></Route>
+    <Route path='/appointment'  element={<AppointmentList/>}></Route>
       </Route>
     </Routes>
    
